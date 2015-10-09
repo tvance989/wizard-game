@@ -78,7 +78,7 @@ public class GameController : MonoBehaviour {
 		spells.Add ("aergeopyr","Soul");
 	}
 
-	public string[] GetAvailableSpells (Item[] items) {
+	public string[] GetSpellsFromItems (Item[] items) {
 		items = items.Where (s => s != null).ToArray ();
 
 		string[] classes = new string [items.Length];

@@ -24,8 +24,6 @@ public class SpellController : MonoBehaviour {
 		cooldownTimers = new float[7];
 
 		spellSpawn = GetComponent<Transform> ();
-
-		SwitchSpells (0);
 	}
 	
 	void Update () {
@@ -54,6 +52,9 @@ public class SpellController : MonoBehaviour {
 	}
 	
 	void Cast (int index) {
+		if (spells [index] == null)
+			return;
+
 		GameObject clone = Instantiate (spells [index], spellSpawn.position, spellSpawn.rotation) as GameObject;
 		cooldownTimers [index] = clone.GetComponent<ISpell> ().Cast ();
 		
@@ -62,17 +63,15 @@ public class SpellController : MonoBehaviour {
 	}
 
 	void SwitchSpells (int index) {
-		if (spells [index] == null) {
-			activeSpellText.text = "";
+		if (spells.Length <= index)
 			return;
-		}
 
-		spellCooldowns [activeSpell].color = new Color (255, 255, 255);
-
-		spellCooldowns [index].color = new Color (255, 255, 0);
-		activeSpellText.text = "Active Spell: " + spells [index].GetComponent<ISpell> ().GetType ().ToString ();
+		spellCooldowns [activeSpell].transform.parent.GetComponent<Image> ().color = new Color (255, 255, 255, 0.5f);
 
 		activeSpell = index;
+		spellCooldowns [activeSpell].transform.parent.GetComponent<Image> ().color = new Color (255, 255, 255, 1f);
+
+		activeSpellText.text = "Active Spell: " + spells [activeSpell].GetComponent<ISpell> ().GetType ().ToString ();
 	}
 
 	void UpdateSpellCooldowns () {
@@ -89,18 +88,24 @@ public class SpellController : MonoBehaviour {
 	}
 
 	public void UpdateAvailableSpells (Item[] items) {
-		string[] names = gameController.GetAvailableSpells (items.Where (s => s != null).ToArray ());
-		spells = new GameObject [names.Length];
+//		string[] oldSpells = spells.Select (i => i.GetComponent<ISpell> ().GetType ().ToString ()).ToArray ();
+		string[] newSpells = gameController.GetSpellsFromItems (items.Where (i => i != null).ToArray ());
+		
+		spells = new GameObject [newSpells.Length];
 
-		for (int i = 0; i < names.Length; i++) {
+		for (int i = 0; i < newSpells.Length; i++) {
 			try {
-				spells [i] = Resources.Load (names [i]) as GameObject;
-			} catch (System.Exception ex) {
-				Debug.Log(ex);
+				spells [i] = Resources.Load ("Spells/" + newSpells [i]) as GameObject;
+			} catch {
+				Debug.Log("Error: Could not load spell " + newSpells [i]);
 			}
 		}
 
-		spells = spells.Where (s => s != null).ToArray ();
+		spells = spells.Where (i => i != null).ToArray ();
+
+		for (int i = 0; i < spells.Length; i++) {
+			spellCooldowns [i].GetComponent<Image> ().sprite = Resources.Load<Sprite> ("Sprites/" + spells [i].GetComponent<ISpell> ().GetType ().ToString ());
+		}
 
 		UpdateSpellCooldowns ();
 	}
