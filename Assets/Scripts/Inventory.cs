@@ -1,57 +1,38 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour {
-	public Item[] items;
-	public Text inventoryText;
+	public Item hat, staff, boots;
+	public Image hatIcon, staffIcon, bootsIcon;
 	public SpellController spellController;
 
-	void Start () {
-		UpdateText ();
-	}
-
-	void Update () {
-		if (Input.GetKey (KeyCode.LeftShift)) {
-			if (Input.GetKeyDown (KeyCode.Z))
-				Drop (0);
-			else if (Input.GetKeyDown (KeyCode.X))
-				Drop (1);
-			else if (Input.GetKeyDown (KeyCode.C))
-				Drop (2);
+	public void PickUp (Item item) {
+		Color color = item.GetComponent<SpriteRenderer> ().color;
+		if (item.article == "hat") {
+			Drop (hat);
+			hat = item;
+			hatIcon.transform.parent.GetComponent<Image> ().color = new Color (color.r, color.g, color.b, 1f);
+		} else if (item.article == "staff") {
+			Drop (staff);
+			staff = item;
+			staffIcon.transform.parent.GetComponent<Image> ().color = new Color (color.r, color.g, color.b, 1f);
+		} else if (item.article == "boots") {
+			Drop (boots);
+			boots = item;
+			bootsIcon.transform.parent.GetComponent<Image> ().color = new Color (color.r, color.g, color.b, 1f);
 		}
-	}
-
-	void UpdateText () {
-		inventoryText.text = "";
-		for (int i = 0; i < items.Length; i++) {
-			if (items [i] == null)
-				continue;
-			inventoryText.text += items [i].wizardClass + " " + items [i].article + "\n";
-		}
-	}
-
-	public void PickUp (Item item, int index) {
-		if (items [index])
-			Drop (index);
 
 		item.Disable ();
 
-		items [index] = item;
-
-		spellController.UpdateAvailableSpells (items);
-
-		UpdateText ();
+		spellController.UpdateAvailableSpells (new Item[] {hat, staff, boots});
 	}
 
-	void Drop (int index) {
-		Item item = items [index];
-		items [index] = null;
-
-		spellController.UpdateAvailableSpells (items);
+	void Drop (Item item) {
+		if (item == null)
+			return;
 
 		item.Enable ();
-
-		UpdateText ();
 	}
 }

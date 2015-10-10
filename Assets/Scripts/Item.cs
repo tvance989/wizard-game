@@ -23,19 +23,13 @@ public class Item : MonoBehaviour {
 	}
 
 	void Update () {
-		if (isInRange && !Input.GetKey (KeyCode.LeftShift)) {
-			if (Input.GetKeyDown (KeyCode.Z))
-				inventory.PickUp (this, 0);
-			else if (Input.GetKeyDown (KeyCode.X))
-				inventory.PickUp (this, 1);
-			else if (Input.GetKeyDown (KeyCode.C))
-				inventory.PickUp (this, 2);
-		}
+		if (isInRange && Input.GetKeyDown (KeyCode.E))
+			inventory.PickUp (this);
 	}
 
 	void OnTriggerEnter2D (Collider2D other) {
 		if (other.tag == "Player") {
-			itemText.text = "Pick up " + wizardClass + " " + article;
+			itemText.text = "Press E to pick up " + wizardClass + " " + article;
 			isInRange = true;
 		}
 	}

@@ -100,7 +100,7 @@ public class GameController : MonoBehaviour {
 			try {
 				availableSpells.Add (spells [key]);
 			} catch {
-				Debug.Log ("There is no spell defined for " + key);
+//				Debug.Log ("There is no spell defined for " + key);
 			}
 		}
 		// 2x
@@ -110,7 +110,7 @@ public class GameController : MonoBehaviour {
 				try {
 					availableSpells.Add (spells [key]);
 				} catch {
-					Debug.Log ("There is no spell defined for " + key);
+//					Debug.Log ("There is no spell defined for " + key);
 				}
 			}
 		}
@@ -120,11 +120,11 @@ public class GameController : MonoBehaviour {
 			try {
 				availableSpells.Add (spells [key]);
 			} catch {
-				Debug.Log ("There is no spell defined for " + key);
+//				Debug.Log ("There is no spell defined for " + key);
 			}
 		}
 
-		Debug.Log ("Available spells: " + string.Join(", ", availableSpells.ToArray()));
+//		Debug.Log ("Available spells: " + string.Join(", ", availableSpells.ToArray()));
 
 		return availableSpells.Distinct ().ToArray ();
 	}
