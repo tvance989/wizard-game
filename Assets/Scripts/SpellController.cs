@@ -88,7 +88,6 @@ public class SpellController : MonoBehaviour {
 	}
 
 	public void UpdateAvailableSpells (Item[] items) {
-//		string[] oldSpells = spells.Select (i => i.GetComponent<ISpell> ().GetType ().ToString ()).ToArray ();
 		string[] newSpells = gameController.GetSpellsFromItems (items.Where (i => i != null).ToArray ());
 		
 		spells = new GameObject [newSpells.Length];
