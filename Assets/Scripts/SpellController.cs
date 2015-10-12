@@ -69,7 +69,7 @@ public class SpellController : MonoBehaviour {
 		spellCooldowns [activeSpell].transform.parent.GetComponent<Image> ().color = new Color (255, 255, 255, 0.5f);
 
 		activeSpell = index;
-		spellCooldowns [activeSpell].transform.parent.GetComponent<Image> ().color = new Color (255, 255, 255, 1f);
+		spellCooldowns [activeSpell].transform.parent.GetComponent<Image> ().color = new Color (255, 255, 0, 1f);
 
 		activeSpellText.text = "Active Spell: " + spells [activeSpell].GetComponent<ISpell> ().GetType ().ToString ();
 	}
