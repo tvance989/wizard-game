@@ -80,5 +80,7 @@ public class Item : MonoBehaviour {
 
 		collider.enabled = false;
 		renderer.enabled = false;
+		
+		itemsInRange.Remove (this);
 	}
 }
