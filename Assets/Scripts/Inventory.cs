@@ -10,18 +10,19 @@ public class Inventory : MonoBehaviour {
 
 	public void PickUp (Item item) {
 		Color color = item.GetComponent<SpriteRenderer> ().color;
+
 		if (item.article == "hat") {
 			Drop (hat);
 			hat = item;
-			hatIcon.transform.parent.GetComponent<Image> ().color = new Color (color.r, color.g, color.b, 1f);
+			hatIcon.transform.parent.GetComponent<Image> ().color = color;
 		} else if (item.article == "staff") {
 			Drop (staff);
 			staff = item;
-			staffIcon.transform.parent.GetComponent<Image> ().color = new Color (color.r, color.g, color.b, 1f);
+			staffIcon.transform.parent.GetComponent<Image> ().color = color;
 		} else if (item.article == "boots") {
 			Drop (boots);
 			boots = item;
-			bootsIcon.transform.parent.GetComponent<Image> ().color = new Color (color.r, color.g, color.b, 1f);
+			bootsIcon.transform.parent.GetComponent<Image> ().color = color;
 		}
 
 		item.Disable ();

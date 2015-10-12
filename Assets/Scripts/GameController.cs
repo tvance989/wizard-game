@@ -76,6 +76,7 @@ public class GameController : MonoBehaviour {
 		
 		// 3x combos
 		spells.Add ("aergeopyr","Soul");
+		spells.Add ("necnecnec","Leechionnaire");
 	}
 
 	public string[] GetSpellsFromItems (Item[] items) {
