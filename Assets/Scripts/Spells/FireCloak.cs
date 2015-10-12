@@ -3,7 +3,7 @@ using System.Collections;
 
 public class FireCloak : MonoBehaviour, ISpell {
 	public float cooldown;
-	public float damage;
+	public float dps;
 	public float duration;
 
 	private float timer;
@@ -13,6 +13,8 @@ public class FireCloak : MonoBehaviour, ISpell {
 	void Start () {
 		transform = GetComponent<Transform> ();
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Transform> ();
+
+		transform.parent = player.transform;
 	}
 	
 	public float Cast () {
@@ -21,16 +23,14 @@ public class FireCloak : MonoBehaviour, ISpell {
 	}
 
 	void Update() {
-		transform.position = player.position;
-
 		if (Time.time >= timer) {
 			Destroy (gameObject);
 		}
 	}
 	
-	void OnTriggerEnter2D (Collider2D other) {
+	void OnTriggerStay2D (Collider2D other) {
 		if (other.tag == "Enemy") {
-			other.SendMessage ("Damage", damage);
+			other.gameObject.SendMessage ("Damage", dps * Time.deltaTime);
 		}
 	}
 }

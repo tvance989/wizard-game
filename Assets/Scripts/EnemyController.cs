@@ -3,12 +3,10 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class EnemyController : MonoBehaviour {
-	public float speed;
-	public float maxHealth;
+	public float speed, maxHealth, dps;
 	public Image healthBar;
 
-	private Transform transform;
-	private Transform player;
+	private Transform transform, player;
 	private float currentHealth;
 	private Image currentHealthBar;
 
@@ -39,8 +37,13 @@ public class EnemyController : MonoBehaviour {
 
 	void Move () {
 		transform.Translate (Vector3.up * speed * Time.deltaTime);
-		// health bar follows the enemy
 		healthBar.GetComponent<Transform> ().position = Camera.main.WorldToScreenPoint (transform.position) + Vector3.up * 20;
+	}
+
+	void OnTriggerStay2D (Collider2D other) {
+		if (other.tag == "Player") {
+			other.gameObject.SendMessage ("Damage", dps * Time.deltaTime);
+		}
 	}
 
 	public void Damage (float damage) {

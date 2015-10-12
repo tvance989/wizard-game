@@ -5,38 +5,35 @@ using System.Collections;
 public class Item : MonoBehaviour {
 	public string wizardClass, article;
 	public Text itemText;
-	public Inventory inventory;
 
 	private Transform transform, player;
 	private Collider2D collider;
 	private Renderer renderer;
-	private bool isInRange;
+	private bool isInRange, isClosest;
 
 	void Start () {
-		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Transform> ();
 		transform = GetComponent<Transform> ();
 		collider = GetComponent<Collider2D> ();
 		renderer = GetComponent<Renderer> ();
 
-		itemText.text = "";
+		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Transform> ();
+
 		isInRange = false;
+		itemText.text = "";
 	}
-
-	void Update () {
-		if (isInRange && Input.GetKeyDown (KeyCode.E))
-			inventory.PickUp (this);
-	}
-
+	
 	void OnTriggerEnter2D (Collider2D other) {
 		if (other.tag == "Player") {
-			itemText.text = "Press E to pick up " + wizardClass + " " + article;
 			isInRange = true;
+			itemText.text = "Press E to pick up " + wizardClass + " " + article;
 		}
 	}
-
+	
 	void OnTriggerExit2D (Collider2D other) {
-		itemText.text = "";
-		isInRange = false;
+		if (other.tag == "Player") {
+			isInRange = isClosest = false;
+			itemText.text = "";
+		}
 	}
 	
 	public void Enable () {
