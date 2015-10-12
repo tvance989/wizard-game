@@ -8,26 +8,44 @@ public class Inventory : MonoBehaviour {
 	public Image hatIcon, staffIcon, bootsIcon;
 	public SpellController spellController;
 
+	private Image hatBorder, staffBorder, bootsBorder;
+
+	void Start () {
+		hatBorder = hatIcon.transform.parent.GetComponent<Image> ();
+		staffBorder = staffIcon.transform.parent.GetComponent<Image> ();
+		bootsBorder = bootsIcon.transform.parent.GetComponent<Image> ();
+	}
+	
+	void Update () {
+		if (Input.GetKeyDown (KeyCode.E)) {
+			PickUp (Item.closestToPlayer);
+			Item.closestToPlayer.UpdateClosestItem ();
+		}
+	}
+
 	public void PickUp (Item item) {
 		Color color = item.GetComponent<SpriteRenderer> ().color;
 
 		if (item.article == "hat") {
 			Drop (hat);
 			hat = item;
-			hatIcon.transform.parent.GetComponent<Image> ().color = color;
+			hatBorder.color = color;
 		} else if (item.article == "staff") {
 			Drop (staff);
 			staff = item;
-			staffIcon.transform.parent.GetComponent<Image> ().color = color;
+			staffBorder.color = color;
 		} else if (item.article == "boots") {
 			Drop (boots);
 			boots = item;
-			bootsIcon.transform.parent.GetComponent<Image> ().color = color;
+			bootsBorder.color = color;
+		} else {
+			Debug.Log ("Can't pick up " + item + ". Invalid article.");
+			return;
 		}
 
-		item.Disable ();
-
 		spellController.UpdateAvailableSpells (new Item[] {hat, staff, boots});
+		
+		item.Disable ();
 	}
 
 	void Drop (Item item) {

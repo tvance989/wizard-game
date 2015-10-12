@@ -1,45 +1,71 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Item : MonoBehaviour {
-	public string wizardClass, article;
+	private static List<Item> itemsInRange = new List<Item> ();
+	public static Item closestToPlayer;
+	private static Transform player;
+	
 	public Text itemText;
+	public string wizardClass, article;
 	public Inventory inventory;
 
-	private Transform transform, player;
+	private Transform transform;
 	private Collider2D collider;
 	private Renderer renderer;
-	private bool isInRange, isClosest;
 
 	void Start () {
 		transform = GetComponent<Transform> ();
 		collider = GetComponent<Collider2D> ();
 		renderer = GetComponent<Renderer> ();
 
-		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Transform> ();
-
-		isInRange = false;
-		itemText.text = "";
-	}
-
-	void Update () {
-		if (isInRange && Input.GetKeyDown (KeyCode.E))
-			inventory.PickUp (this);
+		if (player == null)
+			player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Transform> ();
 	}
 	
 	void OnTriggerEnter2D (Collider2D other) {
-		if (other.tag == "Player") {
-			isInRange = true;
-			itemText.text = "Press E to pick up " + wizardClass + " " + article;
-		}
+		if (other.tag == "Player")
+			itemsInRange.Add (this);
+	}
+	
+	void OnTriggerStay2D (Collider2D other) {
+		if (other.tag == "Player")
+			UpdateClosestItem ();
 	}
 	
 	void OnTriggerExit2D (Collider2D other) {
 		if (other.tag == "Player") {
-			isInRange = isClosest = false;
-			itemText.text = "";
+			itemsInRange.Remove (this);
+			UpdateClosestItem ();
 		}
+	}
+
+	public void UpdateClosestItem () {
+		closestToPlayer = FindClosestItem ();
+		UpdateItemText ();
+	}
+
+	static Item FindClosestItem () {
+		Item closest = null;
+		float distance = Mathf.Infinity;
+		foreach (Item item in itemsInRange) {
+			Vector3 diff = item.transform.position - player.position;
+			float curDistance = diff.sqrMagnitude;
+			if (curDistance < distance) {
+				closest = item;
+				distance = curDistance;
+			}
+		}
+		return closest;
+	}
+
+	void UpdateItemText () {
+		if (closestToPlayer == null)
+			itemText.text = "";
+		else
+			itemText.text = "Press E to pick up " + closestToPlayer.wizardClass + " " + closestToPlayer.article;
 	}
 	
 	public void Enable () {
@@ -51,7 +77,6 @@ public class Item : MonoBehaviour {
 	
 	public void Disable () {
 		transform.position = new Vector3 (-100, -100, 0);
-		isInRange = false;
 
 		collider.enabled = false;
 		renderer.enabled = false;
