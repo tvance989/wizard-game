@@ -5,6 +5,7 @@ using System.Collections;
 public class Item : MonoBehaviour {
 	public string wizardClass, article;
 	public Text itemText;
+	public Inventory inventory;
 
 	private Transform transform, player;
 	private Collider2D collider;
@@ -20,6 +21,11 @@ public class Item : MonoBehaviour {
 
 		isInRange = false;
 		itemText.text = "";
+	}
+
+	void Update () {
+		if (isInRange && Input.GetKeyDown (KeyCode.E))
+			inventory.PickUp (this);
 	}
 	
 	void OnTriggerEnter2D (Collider2D other) {
