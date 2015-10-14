@@ -1,28 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-
-public interface ISpell {
-	float Cast (); // returns the spell's cooldown
-}
 
 public class SpellController : MonoBehaviour {
 	public Text activeSpellText;
 	public Image[] spellCooldowns;
 	public GameController gameController;
 
-	private GameObject[] spells;
+	private Spell[] spells = new Spell[7];
 	private Transform spellSpawn;
-	private float[] nextCast;
-	private float[] cooldownTimers;
+	private static Dictionary<string,float> nextCasts = new Dictionary<string,float> ();
 	private int activeSpell;
 
 	void Start () {
-		spells = new GameObject[7];
-		nextCast = new float[7];
-		cooldownTimers = new float[7];
-
 		spellSpawn = GetComponent<Transform> ();
 	}
 	
@@ -42,11 +34,9 @@ public class SpellController : MonoBehaviour {
 		else if (Input.GetKeyDown (KeyCode.Alpha7))
 			SwitchSpells (6);
 
-		if (Input.GetButton ("Fire1")) {
-			if (Time.time >= nextCast [activeSpell]) {
+		if (Input.GetButton ("Fire1"))
+			if (Time.time > nextCasts [spells [activeSpell].GetType ().ToString ()])
 				Cast (activeSpell);
-			}
-		}
 
 		UpdateSpellCooldowns ();
 	}
@@ -55,11 +45,11 @@ public class SpellController : MonoBehaviour {
 		if (spells [index] == null)
 			return;
 
-		GameObject clone = Instantiate (spells [index], spellSpawn.position, spellSpawn.rotation) as GameObject;
-		cooldownTimers [index] = clone.GetComponent<ISpell> ().Cast ();
-		
-		spellCooldowns [index].fillAmount = 0f;
-		nextCast [index] = Time.time + cooldownTimers [index];
+		GameObject clone = Instantiate (spells [index].gameObject, spellSpawn.position, spellSpawn.rotation) as GameObject;
+		Spell spellScript = clone.GetComponent<Spell> ();
+		spellScript.Cast ();
+
+		nextCasts [spellScript.GetType ().ToString ()] = Time.time + spellScript.cooldown;
 	}
 
 	void SwitchSpells (int index) {
@@ -71,7 +61,7 @@ public class SpellController : MonoBehaviour {
 		activeSpell = index;
 		spellCooldowns [activeSpell].transform.parent.GetComponent<Image> ().color = new Color (255, 255, 0, 1f);
 
-		activeSpellText.text = "Active Spell: " + spells [activeSpell].GetComponent<ISpell> ().GetType ().ToString ();
+		activeSpellText.text = "Active Spell: " + spells [activeSpell].GetComponent<Spell> ().GetType ().ToString ();
 	}
 
 	void UpdateSpellCooldowns () {
@@ -82,19 +72,20 @@ public class SpellController : MonoBehaviour {
 				if (spells [i] != null)
 					spellCooldowns [i].enabled = true;
 
-			if (spellCooldowns [i].fillAmount < 1)
-				spellCooldowns [i].fillAmount += Time.deltaTime / cooldownTimers [i];
+			if (spellCooldowns [i].enabled)
+				spellCooldowns [i].fillAmount = 1 - ((nextCasts [spells [i].GetType ().ToString ()] - Time.time) / spells [i].cooldown);
 		}
 	}
 
 	public void UpdateAvailableSpells (Item[] items) {
 		string[] newSpells = gameController.GetSpellsFromItems (items.Where (i => i != null).ToArray ());
 		
-		spells = new GameObject [newSpells.Length];
+		spells = new Spell[newSpells.Length];
 
 		for (int i = 0; i < newSpells.Length; i++) {
 			try {
-				spells [i] = Resources.Load ("Spells/" + newSpells [i]) as GameObject;
+				GameObject temp = Resources.Load ("Spells/" + newSpells [i]) as GameObject;
+				spells [i] = temp.GetComponent<Spell> ();
 			} catch {
 				Debug.Log("Error: Could not load spell " + newSpells [i]);
 			}
@@ -103,7 +94,10 @@ public class SpellController : MonoBehaviour {
 		spells = spells.Where (i => i != null).ToArray ();
 
 		for (int i = 0; i < spells.Length; i++) {
-			spellCooldowns [i].GetComponent<Image> ().sprite = Resources.Load<Sprite> ("Sprites/" + spells [i].GetComponent<ISpell> ().GetType ().ToString ());
+			spellCooldowns [i].GetComponent<Image> ().sprite = spells [i].icon;
+
+			if (!nextCasts.ContainsKey (spells [i].name))
+				nextCasts.Add (spells [i].name, 0f);
 		}
 
 		UpdateSpellCooldowns ();

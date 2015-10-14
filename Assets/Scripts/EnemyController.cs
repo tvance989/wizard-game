@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class EnemyController : MonoBehaviour {
-	public float speed, maxHealth, dps;
+	public float speed, maxHealth, dps, range;
 	public Image healthBar;
 
 	private Transform transform, player;
@@ -21,6 +21,12 @@ public class EnemyController : MonoBehaviour {
 	void Update () {
 		Rotate ();
 		Move ();
+
+		Vector3 diff = player.position - transform.position;
+		float dist = diff.sqrMagnitude;
+		if (dist <= range) {
+			player.GetComponent<PlayerController> ().Damage (dps * Time.deltaTime);
+		}
 	}
 
 	void CreateHealthBar () {
@@ -38,12 +44,6 @@ public class EnemyController : MonoBehaviour {
 	void Move () {
 		transform.Translate (Vector3.up * speed * Time.deltaTime);
 		healthBar.GetComponent<Transform> ().position = Camera.main.WorldToScreenPoint (transform.position) + Vector3.up * 20;
-	}
-
-	void OnTriggerStay2D (Collider2D other) {
-		if (other.tag == "Player") {
-			other.gameObject.SendMessage ("Damage", dps * Time.deltaTime);
-		}
 	}
 
 	public void Damage (float damage) {
