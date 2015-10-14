@@ -75,7 +75,7 @@ public class Leech : MonoBehaviour {
 		while (currentLife > 0) {
 			float health = hps * Time.deltaTime;
 			float balance = player.GetComponent<PlayerController> ().Heal (health);
-			currentLife -= balance;
+			currentLife -= health - balance;
 			yield return null;
 		}
 		

@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Boulder : MonoBehaviour, ISpell {
-	public float cooldown;
+public class Boulder : Spell {
 	public float damage;
 	public float speed;
 
@@ -12,7 +11,7 @@ public class Boulder : MonoBehaviour, ISpell {
 		velocity = GetComponent<Rigidbody2D> ().velocity;
 	}
 	
-	public float Cast () {
+	public override float Cast () {
 		GetComponent<Rigidbody2D> ().velocity = GetComponent<Transform> ().up * speed;
 		return cooldown;
 	}

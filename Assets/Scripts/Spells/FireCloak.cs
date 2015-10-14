@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FireCloak : MonoBehaviour, ISpell {
-	public float cooldown;
+public class FireCloak : Spell {
 	public float dps;
 	public float duration;
 
@@ -17,7 +16,7 @@ public class FireCloak : MonoBehaviour, ISpell {
 		transform.parent = player.transform;
 	}
 	
-	public float Cast () {
+	public override float Cast () {
 		timer = Time.time + duration;
 		return cooldown;
 	}
