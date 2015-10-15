@@ -2,12 +2,10 @@
 using System.Collections;
 
 public class FireCloak : Spell {
-	public float dps;
-	public float duration;
+	public float dps, duration, fireballMultiplier;
 
 	private float ttl;
-	private Transform transform;
-	private Transform player;
+	private Transform transform, player;
 
 	void Start () {
 		transform = GetComponent<Transform> ();
@@ -17,11 +15,13 @@ public class FireCloak : Spell {
 	}
 	
 	public override void Cast () {
+		Fireball.multiplier = 2f;
 		ttl = Time.time + duration;
 	}
 
 	void Update() {
 		if (Time.time >= ttl) {
+			Fireball.multiplier = 1f;
 			Destroy (gameObject);
 		}
 	}
