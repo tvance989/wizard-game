@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FireCloak : Spell {
-	public float dps, duration, fireballMultiplier;
+public class HealingLight : Spell {
+	public float health, duration;
 
 	private float ttl;
 
@@ -11,20 +11,13 @@ public class FireCloak : Spell {
 	}
 	
 	public override void Cast () {
-		Fireball.multiplier = 2f;
+		GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ().Heal (health);
 		ttl = Time.time + duration;
 	}
 
 	void Update() {
 		if (Time.time >= ttl) {
-			Fireball.multiplier = 1f;
 			Destroy (gameObject);
-		}
-	}
-	
-	void OnTriggerStay2D (Collider2D other) {
-		if (other.tag == "Enemy") {
-			other.gameObject.SendMessage ("Damage", dps * Time.deltaTime);
 		}
 	}
 }
