@@ -7,10 +7,12 @@ public class Leech : MonoBehaviour {
 	private float currentLife;
 	private Transform transform, target, player;
 	private bool targetReached, capacityReached, playerReached;
+	private PlayerController pc;
 
 	void Awake () {
 		transform = GetComponent<Transform> ();
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Transform> ();
+		pc = player.GetComponent<PlayerController> ();
 
 		targetReached = capacityReached = playerReached = false;
 	}
@@ -74,7 +76,7 @@ public class Leech : MonoBehaviour {
 	IEnumerator HealPlayer () {
 		while (currentLife > 0) {
 			float health = hps * Time.deltaTime;
-			float balance = player.GetComponent<PlayerController> ().Heal (health);
+			float balance = pc.Heal (health);
 			currentLife -= health - balance;
 			yield return null;
 		}
