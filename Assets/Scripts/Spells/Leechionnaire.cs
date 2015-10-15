@@ -11,7 +11,7 @@ public class Leechionnaire : Spell {
 		lastCast = this;
 	}
 
-	public override float Cast () {
+	public override void Cast () {
 		Transform transform = GetComponent<Transform> ();
 
 		GameObject[] enemies = GameObject.FindGameObjectsWithTag ("Enemy");
@@ -21,8 +21,6 @@ public class Leechionnaire : Spell {
 			leeches.Add (clone);
 			clone.GetComponent<Leech> ().SetTarget (enemy);
 		}
-
-		return cooldown;
 	}
 
 	void DestroyInstances () {

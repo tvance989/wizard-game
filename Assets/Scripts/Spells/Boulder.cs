@@ -11,9 +11,8 @@ public class Boulder : Spell {
 		velocity = GetComponent<Rigidbody2D> ().velocity;
 	}
 	
-	public override float Cast () {
+	public override void Cast () {
 		GetComponent<Rigidbody2D> ().velocity = GetComponent<Transform> ().up * speed;
-		return cooldown;
 	}
 	
 	void OnTriggerEnter2D (Collider2D other) {
