@@ -5,7 +5,7 @@ public class FireCloak : Spell {
 	public float dps;
 	public float duration;
 
-	private float timer;
+	private float ttl;
 	private Transform transform;
 	private Transform player;
 
@@ -16,13 +16,12 @@ public class FireCloak : Spell {
 		transform.parent = player.transform;
 	}
 	
-	public override float Cast () {
-		timer = Time.time + duration;
-		return cooldown;
+	public override void Cast () {
+		ttl = Time.time + duration;
 	}
 
 	void Update() {
-		if (Time.time >= timer) {
+		if (Time.time >= ttl) {
 			Destroy (gameObject);
 		}
 	}

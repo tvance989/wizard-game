@@ -65,7 +65,6 @@ public class SpellController : MonoBehaviour {
 	}
 
 	void UpdateSpellCooldowns () {
-		//.make this into an animation so it doesn't have to update every frame
 		for (int i = 0; i < spellCooldowns.Length; i++) {
 			spellCooldowns [i].enabled = false;
 			if (spells.Length > i)

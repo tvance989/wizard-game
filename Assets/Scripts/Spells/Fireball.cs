@@ -5,9 +5,8 @@ public class Fireball : Spell {
 	public float damage;
 	public float speed;
 	
-	public override float Cast () {
+	public override void Cast () {
 		GetComponent<Rigidbody2D> ().velocity = GetComponent<Transform> ().up * speed;
-		return cooldown;
 	}
 
 	void OnTriggerEnter2D (Collider2D other) {
