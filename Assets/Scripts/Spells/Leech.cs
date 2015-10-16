@@ -46,7 +46,7 @@ public class Leech : MonoBehaviour {
 				break;
 			}
 
-			currentLife += damage;
+			currentLife += damage; //.return the balance from enemycontroller, like player.Heal()
 
 			if (currentLife >= capacity) {
 				currentLife = capacity;
