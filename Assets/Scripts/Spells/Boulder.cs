@@ -2,25 +2,35 @@
 using System.Collections;
 
 public class Boulder : Spell {
-	public float damage;
-	public float speed;
+	public float damage, speed, spawnDistance;
 
-	private Vector2 velocity;
+	private Transform transform;
+	private Rigidbody2D rb;
 
-	void Start () {
-		velocity = GetComponent<Rigidbody2D> ().velocity;
+	void Awake () {
+		transform = GetComponent<Transform> ();
+		rb = GetComponent<Rigidbody2D> ();
+
+		// start at mouse click
+		transform.position = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+		transform.position = new Vector3 (transform.position.x, transform.position.y, 0f);
+
+		// randomly rotate and move back (off screen)
+		transform.Rotate (0f, 0f, Random.Range(0f,360f));
+		transform.Translate (Vector3.down * spawnDistance);
 	}
 	
 	public override void Cast () {
-		GetComponent<Rigidbody2D> ().velocity = GetComponent<Transform> ().up * speed;
+		rb.velocity = transform.up * speed; // roll forward (toward mouse click)
 	}
 	
 	void OnTriggerEnter2D (Collider2D other) {
 		if (other.tag == "Enemy") {
 			other.SendMessage ("Damage", damage);
-			if (velocity.magnitude > speed / 2f) {
-				velocity -= Vector2.one * 0.2f; // slows the boulder with each collision
-			}
+
+			// slow boulder with each collision
+			if (rb.velocity.magnitude > speed / 2f)
+				rb.velocity *= 0.8f;
 		}
 	}
 }
