@@ -3,12 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Leechionnaire : Spell {
-	private static Leechionnaire lastCast;
-	private List<GameObject> leeches = new List<GameObject> ();
+	private static List<GameObject> leeches = new List<GameObject> ();
 
-	void Start () {
-		DestroyInstances ();
-		lastCast = this;
+	void Awake () {
+		DestroyPrevious ();
 	}
 
 	public override void Cast () {
@@ -21,18 +19,15 @@ public class Leechionnaire : Spell {
 			leeches.Add (clone);
 			clone.GetComponent<Leech> ().SetTarget (enemy);
 		}
+
+		Destroy (this.gameObject);
 	}
 
-	void DestroyInstances () {
-		if (lastCast == null)
-			return;
-
-		foreach (GameObject leech in lastCast.leeches) {
+	void DestroyPrevious () {
+		foreach (GameObject leech in Leechionnaire.leeches)
 			if (leech != null)
 				Destroy (leech);
-		}
-		Destroy (lastCast.gameObject);
 
-		lastCast = null;
+		Leechionnaire.leeches = new List<GameObject> ();
 	}
 }

@@ -5,12 +5,22 @@ using System.Collections.Generic;
 public class Armyodillos : Spell {
 	public int number;
 
-	public override void Cast () {GameObject[] enemies = GameObject.FindGameObjectsWithTag ("Enemy");
-		float y = Camera.main.orthographicSize;
-		float x = y * Screen.width / Screen.height;
+	private float xMin, xMax, yMin, yMax;
+
+	void Awake () {
+		yMax = Camera.main.orthographicSize;
+		yMin = -yMax;
+		xMax = -Camera.main.orthographicSize * Screen.width / Screen.height;
+		xMax -= 5f;
+		xMin = xMax - 20f;
+	}
+
+	public override void Cast () {
 		for (int i = 0; i < number; i++) {
-			Vector3 pos = new Vector3 (Random.Range (-x-10f, -x), Random.Range (-y, y), 0f);
-			//.change spawn to somewhere off screen. maybe roll in from same direction or all random
+			float x = Random.Range (xMin, xMax);
+			float y = Random.Range (yMin, yMax);
+			Vector3 pos = new Vector3 (x, y, 0f);
+
 			GameObject clone = Instantiate (Resources.Load ("Spells/Armadillo") as GameObject, pos, Quaternion.identity) as GameObject;
 			clone.GetComponent<Armadillo> ().Roll ();
 		}
