@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour {
 	void BuildSpellList () {
 		spells = new Dictionary<string,string> ();
 		
-		// pure spells
+		// 1x spells
 		spells.Add ("aer","ForcePush");
 		spells.Add ("alc","Poison");
 		spells.Add ("chr","ReverseTime");
@@ -27,7 +27,7 @@ public class GameController : MonoBehaviour {
 		spells.Add ("pyrpyrpyr","FireCloak");
 		spells.Add ("sum","SummonOni");
 		
-		// 2x combos
+		// 2x spells
 		spells.Add ("aeralc","AirborneVirus");
 		spells.Add ("aerchr","Haste");
 		spells.Add ("aercle","HolyGhost");
@@ -74,8 +74,9 @@ public class GameController : MonoBehaviour {
 		spells.Add ("necsum","SummonSkeleton");
 		spells.Add ("pyrsum","SummonFireSprites");
 		
-		// 3x combos
+		// 3x spells
 		spells.Add ("aergeopyr","Soul");
+		spells.Add ("hydhydhyd","Glacier");
 		spells.Add ("necnecnec","Leechionnaire");
 	}
 
