@@ -7,11 +7,13 @@ public class BirdCall : Spell {
 	private Transform transform, player;
 	private PlayerController pc;
 	private float currentLife;
+	private ParticleSystem particles;
 
 	void Awake () {
 		transform = GetComponent<Transform> ();
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Transform> ();
 		pc = player.GetComponent<PlayerController> ();
+		particles = GetComponent<ParticleSystem> ();
 
 		currentLife = capacity;
 	}
@@ -33,7 +35,13 @@ public class BirdCall : Spell {
 		if (currentLife > 0) {
 			float health = hps * Time.deltaTime;
 			float balance = pc.Heal (health);
+
 			currentLife -= health - balance;
+
+			if (balance == 0)
+				particles.enableEmission = true;
+			else
+				particles.enableEmission = false;
 		} else {
 			Destroy (gameObject);
 		}
