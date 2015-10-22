@@ -13,7 +13,7 @@ public class BirdCall : Spell {
 		transform = GetComponent<Transform> ();
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Transform> ();
 		pc = player.GetComponent<PlayerController> ();
-		particles = GetComponent<ParticleSystem> ();
+		particles = GetComponentInChildren<ParticleSystem> ();
 
 		currentLife = capacity;
 	}
@@ -28,7 +28,7 @@ public class BirdCall : Spell {
 		float y = b * Mathf.Sin (speed * Time.time);
 
 		x += player.position.x;
-		y += player.position.y + 1.5f;
+		y += player.position.y + 2f;
 
 		transform.position = new Vector3 (x, y, 0f);
 
