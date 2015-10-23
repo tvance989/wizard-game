@@ -6,11 +6,13 @@ public class Leech : MonoBehaviour {
 
 	private float currentLife;
 	private Transform transform, target, player;
+	private ParticleSystem particles;
 	private bool targetReached, capacityReached, playerReached;
 	private PlayerController pc;
 
 	void Awake () {
 		transform = GetComponent<Transform> ();
+		particles = GetComponent<ParticleSystem> ();
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Transform> ();
 		pc = player.GetComponent<PlayerController> ();
 
@@ -37,6 +39,10 @@ public class Leech : MonoBehaviour {
 	}
 
 	IEnumerator LeechLife () {
+		particles.Simulate (0f);
+		particles.startColor = new Color (255f, 0f, 0f);
+		particles.Play ();
+
 		while (!capacityReached) {
 			float damage = dps * Time.deltaTime;
 
@@ -56,6 +62,7 @@ public class Leech : MonoBehaviour {
 			yield return null;
 		}
 
+		particles.Stop ();
 		StartCoroutine (MoveToPlayer ());
 	}
 	
@@ -74,10 +81,20 @@ public class Leech : MonoBehaviour {
 	}
 	
 	IEnumerator HealPlayer () {
+		particles.startColor = new Color (0f, 255f, 0f);
+		particles.Play ();
+
 		while (currentLife > 0) {
 			float health = hps * Time.deltaTime;
 			float balance = pc.Heal (health);
+
 			currentLife -= health - balance;
+
+			if (balance == 0)
+				particles.enableEmission = true;
+			else
+				particles.enableEmission = false;
+
 			yield return null;
 		}
 		
