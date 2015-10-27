@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour {
 	public float maxHealth;
 	public Image healthBar;
 
-	private Transform transform;
+	private new Transform transform;
 	private float currentHealth;
 	private Image currentHealthBar;
 

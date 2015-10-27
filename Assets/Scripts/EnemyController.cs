@@ -6,7 +6,8 @@ public class EnemyController : MonoBehaviour {
 	public float speed, maxHealth, dps, range;
 	public Image healthBar;
 
-	private Transform transform, player;
+	private new Transform transform;
+	private Transform player;
 	private float currentHealth;
 	private Image currentHealthBar;
 

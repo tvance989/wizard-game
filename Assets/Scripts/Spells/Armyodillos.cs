@@ -17,9 +17,7 @@ public class Armyodillos : Spell {
 
 	public override void Cast () {
 		for (int i = 0; i < number; i++) {
-			float x = Random.Range (xMin, xMax);
-			float y = Random.Range (yMin, yMax);
-			Vector3 pos = new Vector3 (x, y, 0f);
+			Vector3 pos = new Vector3 (Random.Range (xMin, xMax), Random.Range (yMin, yMax), 0f);
 
 			GameObject clone = Instantiate (Resources.Load ("Spells/Armadillo") as GameObject, pos, Quaternion.identity) as GameObject;
 			clone.GetComponent<Armadillo> ().Roll ();

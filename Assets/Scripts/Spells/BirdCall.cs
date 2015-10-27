@@ -4,7 +4,8 @@ using System.Collections;
 public class BirdCall : Spell {
 	public float capacity, hps, a, b, speed;
 
-	private Transform transform, player;
+	private new Transform transform;
+	private Transform player;
 	private PlayerController pc;
 	private float currentLife;
 	private ParticleSystem particles;

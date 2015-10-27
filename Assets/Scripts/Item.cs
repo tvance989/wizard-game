@@ -12,9 +12,9 @@ public class Item : MonoBehaviour {
 	public string wizardClass, article;
 	public Inventory inventory;
 
-	private Transform transform;
-	private Collider2D collider;
-	private Renderer renderer;
+	private new Transform transform;
+	private new Collider2D collider;
+	private new Renderer renderer;
 
 	void Start () {
 		transform = GetComponent<Transform> ();
