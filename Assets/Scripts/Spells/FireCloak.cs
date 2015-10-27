@@ -23,8 +23,7 @@ public class FireCloak : Spell {
 	}
 	
 	void OnTriggerStay2D (Collider2D other) {
-		if (other.tag == "Enemy") {
+		if (other.tag == "Enemy")
 			other.gameObject.SendMessage ("Damage", dps * Time.deltaTime);
-		}
 	}
 }
