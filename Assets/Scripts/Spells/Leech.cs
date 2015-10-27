@@ -5,7 +5,8 @@ public class Leech : MonoBehaviour {
 	public float speed, capacity, dps, hps;
 
 	private float currentLife;
-	private Transform transform, target, player;
+	private new Transform transform;
+	private Transform target, player;
 	private ParticleSystem particles;
 	private bool targetReached, capacityReached, playerReached;
 	private PlayerController pc;

@@ -4,12 +4,12 @@ using System.Collections;
 public class Boulder : Spell {
 	public float damage, speed, spawnDistance;
 
-	private Transform transform;
-	private Rigidbody2D rb;
+	private new Transform transform;
+	private new Rigidbody2D rigidbody;
 
 	void Awake () {
 		transform = GetComponent<Transform> ();
-		rb = GetComponent<Rigidbody2D> ();
+		rigidbody = GetComponent<Rigidbody2D> ();
 
 		// start at mouse click
 		transform.position = Camera.main.ScreenToWorldPoint (Input.mousePosition);
@@ -21,7 +21,7 @@ public class Boulder : Spell {
 	}
 	
 	public override void Cast () {
-		rb.velocity = transform.up * speed; // roll forward (toward mouse click)
+		rigidbody.velocity = transform.up * speed; // roll forward (toward mouse click)
 	}
 	
 	void OnTriggerEnter2D (Collider2D other) {
@@ -29,8 +29,8 @@ public class Boulder : Spell {
 			other.SendMessage ("Damage", damage);
 
 			// slow boulder with each collision
-			if (rb.velocity.magnitude > speed / 2f)
-				rb.velocity *= 0.8f;
+			if (rigidbody.velocity.magnitude > speed / 2f)
+				rigidbody.velocity *= 0.8f;
 		}
 	}
 }
