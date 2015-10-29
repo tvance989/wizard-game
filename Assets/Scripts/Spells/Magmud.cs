@@ -17,14 +17,12 @@ public class Magmud : Spell {
 	}
 	
 	void OnTriggerStay2D (Collider2D other) {
-		if (other.tag == "Enemy") {
+		if (other.tag == "Enemy")
 			other.gameObject.SendMessage ("Damage", dps * Time.deltaTime);
-		}
 	}
 	
 	void Update() {
-		if (Time.time >= ttl) {
+		if (Time.time >= ttl)
 			Destroy (gameObject);
-		}
 	}
 }
