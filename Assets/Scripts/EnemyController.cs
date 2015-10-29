@@ -5,6 +5,7 @@ using System.Collections;
 public class EnemyController : MonoBehaviour {
 	public float speed, maxHealth, dps, range;
 	public Image healthBar;
+	public float speedMultiplier = 1f;
 
 	private new Transform transform;
 	private Transform player;
@@ -43,7 +44,7 @@ public class EnemyController : MonoBehaviour {
 	}
 
 	void Move () {
-		transform.Translate (Vector3.up * speed * Time.deltaTime);
+		transform.Translate (Vector3.up * speed * speedMultiplier * Time.deltaTime);
 		healthBar.GetComponent<Transform> ().position = Camera.main.WorldToScreenPoint (transform.position) + Vector3.up * 20;
 	}
 
