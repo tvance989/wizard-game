@@ -51,3 +51,6 @@ ehthumbs.db
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
+
+# Taylor additions
+*.DS_Store
