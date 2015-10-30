@@ -7,7 +7,7 @@
 Contains all of our spell combinations. This returns a list of spell combinations based on items in the inventory.
 
 ##### Scripts/Inventory.cs
-When the player picks up an item, this tells the spell controller to update its available spells.
+When the player picks up an item, this tells the spell controller to update its available spells, which are returned by the GameController.
 
 ##### Scripts/Item.cs
 These have public variables _wizardClass_ (pyr, hyd, etc) and _article_ (hat, staff, boot). Items must be given a wizardClass of the first 3 letters of the class name (e.g. druid -> dru; cleric -> cle).
@@ -15,11 +15,11 @@ These have public variables _wizardClass_ (pyr, hyd, etc) and _article_ (hat, st
 ##### Scripts/SpellController.cs
 Changes and casts spells and handles cooldowns.
 
-##### Scripts/Spells/
+##### Scripts/Spells/*.cs
 Logic for each spell. Once SpellController calls the spell's Cast method, these take over.
 Note: All spell scripts must inherit from Spell (Scripts/Spell.cs).
 
-##### Resources/Spells/
+##### Resources/Spells/*
 Prefabs for each spell.
 
 
