@@ -4,8 +4,8 @@ using System.Collections;
 
 public class EnemyController : MonoBehaviour {
 	public float speed, maxHealth, dps, range;
-	public Image healthBar;
 	public float speedMultiplier = 1f;
+	public Image healthBar;
 
 	private new Transform transform;
 	private Transform player;

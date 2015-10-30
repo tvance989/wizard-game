@@ -4,6 +4,8 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 	public float speed;
+	public float speedMultiplier = 1f;
+	public bool isFrozen, isInvincible;
 	public float maxHealth;
 	public Image healthBar;
 
@@ -30,6 +32,9 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void Rotate () {
+		if (isFrozen)
+			return;
+
 		Vector3 mousePos = Input.mousePosition;
 		Vector3 objectPos = Camera.main.WorldToScreenPoint (transform.position);
 		mousePos.x -= objectPos.x;
@@ -40,11 +45,14 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Move () {
+		if (isFrozen)
+			return;
+
 		float x = Input.GetAxis ("Horizontal");
 		float y = Input.GetAxis ("Vertical");
 
 		Vector3 movement = new Vector3 (x, y, 0);
-		movement *= speed * Time.deltaTime;
+		movement *= speed * speedMultiplier * Time.deltaTime;
 
 		transform.Translate (movement, Space.World);
 
@@ -67,6 +75,9 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	public void Damage (float damage) {
+		if (isInvincible)
+			return;
+
 		currentHealth -= damage;
 		
 		if (currentHealth <= 0)
