@@ -48,7 +48,7 @@ public class Leech : MonoBehaviour {
 			float damage = dps * Time.deltaTime;
 
 			try {
-				target.GetComponent<EnemyController> ().Damage (damage);
+				target.GetComponent<Health> ().Damage (damage);
 			} catch {
 				break;
 			}

@@ -6,31 +6,20 @@ public class PlayerController : MonoBehaviour {
 	public float speed;
 	public float speedMultiplier = 1f;
 	public bool isFrozen, isInvincible;
-	public float maxHealth;
-	public Image healthBar;
 
 	private new Transform transform;
-	private float currentHealth;
-	private Image currentHealthBar;
-
-	void Start () {
+	private Health health;
+	
+	void Awake () {
 		transform = GetComponent<Transform> ();
-		
-		currentHealth = maxHealth;
-		CreateHealthBar ();
+		health = GetComponent<Health> ();
 	}
 
 	void Update () {
 		Rotate ();
 		Move ();
 	}
-	
-	void CreateHealthBar () {
-		healthBar = Instantiate (healthBar) as Image;
-		healthBar.transform.SetParent (GameObject.FindGameObjectWithTag ("Canvas").GetComponent<Transform> ());
-		currentHealthBar = healthBar.GetComponentsInChildren<Image> () [1];
-	}
-	
+
 	void Rotate () {
 		if (isFrozen)
 			return;
@@ -55,39 +44,9 @@ public class PlayerController : MonoBehaviour {
 		movement *= speed * speedMultiplier * Time.deltaTime;
 
 		transform.Translate (movement, Space.World);
-
-		healthBar.GetComponent<Transform> ().position = Camera.main.WorldToScreenPoint (transform.position) + Vector3.up * 30;
-	}
-
-	public float Heal (float health) {
-		float balance = 0f;
-
-		currentHealth += health;
-
-		if (currentHealth > maxHealth) {
-			balance = currentHealth - maxHealth;
-			currentHealth = maxHealth;
-		}
-		
-		currentHealthBar.fillAmount = currentHealth / maxHealth;
-
-		return balance;
 	}
 	
-	public void Damage (float damage) {
-		if (isInvincible)
-			return;
-
-		currentHealth -= damage;
-		
-		if (currentHealth <= 0)
-			Die ();
-		
-		currentHealthBar.fillAmount = currentHealth / maxHealth;
-	}
-	
-	void Die () {
-		Destroy (healthBar);
-		Destroy (gameObject);
+	public float Heal (float x) {
+		return health.Heal (x);
 	}
 }
