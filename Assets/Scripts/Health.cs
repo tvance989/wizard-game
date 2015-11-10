@@ -3,46 +3,45 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class Health : MonoBehaviour {
-	public float maxHealth;
+	public float maximum, current;
 	public Image healthBar;
 	public bool isInvincible;//.is there a better way to handle this? maybe a health status system (burning, invincible, poisoned, etc)
 
-	private float curHealth;
-	private new Transform transform;
-	private Transform playerTransform;
-	private Image curHealthBar;
+	Image obj;
+	Transform targetTransform, healthBarTransform;
+	Image curHealthBar;
 
-	void Awake () {
-		playerTransform = GetComponent<Transform> ();
-		curHealth = maxHealth;
+	void Start () {
+		current = maximum;
 		CreateHealthBar ();
-
 	}
 
 	void CreateHealthBar () {
-		healthBar = Instantiate (healthBar) as Image;
-		transform = healthBar.GetComponent<Transform> ();
-		transform.SetParent (GameObject.FindGameObjectWithTag ("Canvas").GetComponent<Transform> ());
-		transform.Translate (new Vector3 (0, 3));
-		curHealthBar = healthBar.GetComponentsInChildren<Image> () [1];
+		targetTransform = GetComponent<Transform> ();
+
+		obj = Instantiate (healthBar) as Image;
+		healthBarTransform = obj.GetComponent<Transform> ();
+
+		healthBarTransform.SetParent (GameObject.FindGameObjectWithTag ("Canvas").GetComponent<Transform> ());
+		curHealthBar = obj.GetComponentsInChildren<Image> () [1];
 	}
 	
 	void Update () {
 		//.set parent instead of updating every frame?
-		transform.position = Camera.main.WorldToScreenPoint (playerTransform.position) + Vector3.up * 30;
+		healthBarTransform.position = Camera.main.WorldToScreenPoint (targetTransform.position) + Vector3.up * 25;
 	}
 
 	public float Heal (float health) {
 		float balance = 0f;
 		
-		curHealth += health;
+		current += health;
 		
-		if (curHealth > maxHealth) {
-			balance = curHealth - maxHealth;
-			curHealth = maxHealth;
+		if (current > maximum) {
+			balance = current - maximum;
+			current = maximum;
 		}
 		
-		curHealthBar.fillAmount = curHealth / maxHealth;
+		curHealthBar.fillAmount = current / maximum;
 		
 		return balance;
 	}
@@ -51,16 +50,16 @@ public class Health : MonoBehaviour {
 		if (isInvincible)
 			return;
 
-		curHealth -= damage;
+		current -= damage;
 		
-		if (curHealth <= 0)
+		if (current <= 0)
 			Kill ();
 
-		curHealthBar.fillAmount = curHealth / maxHealth;
+		curHealthBar.fillAmount = current / maximum;
 	}
 
 	void Kill () {
-		Destroy (healthBar);
+		Destroy (obj);
 		Destroy (gameObject);
 	}
 }
