@@ -6,31 +6,33 @@ public class PlayerController : MonoBehaviour {
 	public float speed;
 	public float speedMultiplier = 1f;
 	public bool isFrozen, isInvincible;
-
-	private new Transform transform;
-	private Health health;
+	
+	Rigidbody2D rb;
+	Health health;
 	
 	void Awake () {
-		transform = GetComponent<Transform> ();
+		rb = GetComponent<Rigidbody2D> ();
+		rb.centerOfMass = new Vector2 (0, 0);
+
 		health = GetComponent<Health> ();
 	}
 
-	void Update () {
+	void FixedUpdate () {
 		Rotate ();
 		Move ();
 	}
 
 	void Rotate () {
-		if (isFrozen)
+		if (isFrozen) //.eventually offload this onto the attribute system
 			return;
 
-		Vector3 mousePos = Input.mousePosition;
-		Vector3 objectPos = Camera.main.WorldToScreenPoint (transform.position);
+		Vector2 mousePos = Input.mousePosition;
+		Vector2 objectPos = Camera.main.WorldToScreenPoint (rb.position);
 		mousePos.x -= objectPos.x;
 		mousePos.y -= objectPos.y;
 		float playerRotationAngle = Mathf.Atan2 (mousePos.y, mousePos.x) * Mathf.Rad2Deg - 90;
-		
-		transform.rotation = Quaternion.Euler (new Vector3 (0, 0, playerRotationAngle));
+
+		rb.MoveRotation (playerRotationAngle);
 	}
 
 	void Move () {
@@ -40,10 +42,10 @@ public class PlayerController : MonoBehaviour {
 		float x = Input.GetAxis ("Horizontal");
 		float y = Input.GetAxis ("Vertical");
 
-		Vector3 movement = new Vector3 (x, y, 0);
-		movement *= speed * speedMultiplier * Time.deltaTime;
+		Vector2 movement = new Vector3 (x, y);
+		movement *= speed * speedMultiplier * Time.fixedDeltaTime;
 
-		transform.Translate (movement, Space.World);
+		rb.MovePosition (rb.position + movement);
 	}
 	
 	public float Heal (float x) {

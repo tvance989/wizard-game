@@ -6,34 +6,38 @@ public class EnemyController : MonoBehaviour {
 	public float speed, maxHealth, dps, range;
 	public float speedMultiplier = 1f;
 
-	private new Transform transform;
-	private Transform player;
+	new Transform transform;
+	Rigidbody2D rb;
+	Rigidbody2D player;
 
 	void Start () {
 		transform = GetComponent<Transform> ();
-		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Transform> ();
+		rb = GetComponent<Rigidbody2D> ();
+
+		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Rigidbody2D> ();
 	}
 
-	void Update () {
+	void FixedUpdate () {
 		if (player == null)
 			return;
 
 		Rotate ();
 		Move ();
 
-		Vector3 diff = player.position - transform.position;
+		Vector2 diff = player.position - rb.position;
 		float dist = diff.sqrMagnitude;
 		if (dist <= range)
-			player.GetComponent<Health> ().Damage (dps * Time.deltaTime);
+			player.GetComponent<Health> ().Damage (dps * Time.fixedDeltaTime);
 	}
 
 	void Rotate () {
-		Vector3 dir = player.position - transform.position;
+		Vector3 dir = player.position - rb.position;
 		float angle = Mathf.Atan2 (dir.y, dir.x) * Mathf.Rad2Deg - 90;
-		transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
+		rb.MoveRotation (angle);
 	}
 
 	void Move () {
-		transform.Translate (Vector3.up * speed * speedMultiplier * Time.deltaTime);
+		if (rb.velocity.magnitude < speed)
+			rb.AddForce (new Vector2 (transform.up.x, transform.up.y) * speed * speedMultiplier);
 	}
 }
