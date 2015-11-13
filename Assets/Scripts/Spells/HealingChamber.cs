@@ -5,8 +5,8 @@ public class HealingChamber: Spell {
 	public float hps, duration;
 	public GameObject explosion;
 
-	private float ttl;
-	private PlayerController player;
+	float ttl;
+	PlayerController player;
 
 	void Awake () {
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
@@ -33,7 +33,6 @@ public class HealingChamber: Spell {
 	}
 
 	void Explode () {
-		//.spawn explosion and damage nearby enemies
 		Instantiate (explosion, GetComponent<Transform> ().position, Quaternion.identity);
 
 		Destroy (gameObject);

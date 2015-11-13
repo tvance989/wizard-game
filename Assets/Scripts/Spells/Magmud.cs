@@ -4,7 +4,7 @@ using System.Collections;
 public class Magmud : Spell {
 	public float dps, duration;
 	
-	private float ttl;
+	float ttl;
 	
 	void Start () {
 		Transform transform = GetComponent<Transform> ();
