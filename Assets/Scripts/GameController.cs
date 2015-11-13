@@ -76,6 +76,7 @@ public class GameController : MonoBehaviour {
 		
 		// 3x spells
 		spells.Add ("aergeopyr","Soul");
+		spells.Add ("alcalcalc","Bomb");
 		spells.Add ("hydhydhyd","Glacier");
 		spells.Add ("necnecnec","Leechionnaire");
 	}
