@@ -26,13 +26,10 @@ public class PlayerController : MonoBehaviour {
 		if (isFrozen) //.eventually offload this onto the attribute system
 			return;
 
-		Vector2 mousePos = Input.mousePosition;
-		Vector2 objectPos = Camera.main.WorldToScreenPoint (rb.position);
-		mousePos.x -= objectPos.x;
-		mousePos.y -= objectPos.y;
-		float playerRotationAngle = Mathf.Atan2 (mousePos.y, mousePos.x) * Mathf.Rad2Deg - 90;
+		Vector3 dir = Input.mousePosition - Camera.main.WorldToScreenPoint (rb.position);
+		float angle = Mathf.Atan2 (dir.y, dir.x) * Mathf.Rad2Deg - 90;
 
-		rb.MoveRotation (playerRotationAngle);
+		rb.MoveRotation (angle);
 	}
 
 	void Move () {

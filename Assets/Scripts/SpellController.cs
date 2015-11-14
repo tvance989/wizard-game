@@ -9,10 +9,10 @@ public class SpellController : MonoBehaviour {
 	public Image[] spellCooldowns;
 	public GameController gameController;
 
-	private Spell[] spells = new Spell[7];
-	private Transform spellSpawn;
-	private static Dictionary<string,float> nextCasts = new Dictionary<string,float> ();
-	private int activeSpell;
+	Spell[] spells = new Spell[7];
+	Transform spellSpawn;
+	static Dictionary<string,float> nextCasts = new Dictionary<string,float> ();
+	int activeSpell;
 
 	void Start () {
 		spellSpawn = GetComponent<Transform> ();
@@ -45,10 +45,17 @@ public class SpellController : MonoBehaviour {
 		if (spells [index] == null)
 			return;
 
-		GameObject clone = Instantiate (spells [index].gameObject, spellSpawn.position, spellSpawn.rotation) as GameObject;
+		// cast toward mouse click
+		Vector3 dir = Input.mousePosition - Camera.main.WorldToScreenPoint (spellSpawn.position);
+		float angle = Mathf.Atan2 (dir.y, dir.x) * Mathf.Rad2Deg - 90;
+		Quaternion rot = Quaternion.Euler (0, 0, angle);
+
+		// instantiate the spell
+		GameObject clone = Instantiate (spells [index].gameObject, spellSpawn.position, rot) as GameObject;
 		Spell spellScript = clone.GetComponent<Spell> ();
 		spellScript.Cast ();
 
+		// set cooldown
 		nextCasts [spellScript.GetType ().ToString ()] = Time.time + spellScript.cooldown;
 	}
 
