@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class HealingChamber: Spell {
-	public float hps, duration;
+	public float hps, duration, blastRadius, blastDamage, blastForce;
 	public GameObject explosion;
 
 	float ttl;
@@ -32,9 +32,11 @@ public class HealingChamber: Spell {
 		player.gameObject.SendMessage ("Heal", hps * Time.deltaTime);
 	}
 
+	
 	void Explode () {
-		Instantiate (explosion, GetComponent<Transform> ().position, Quaternion.identity);
-
+		GameObject clone = Instantiate (explosion, GetComponent<Transform> ().position, Quaternion.identity) as GameObject;
+		clone.GetComponent<Explosion> ().Explode (blastRadius, blastDamage, blastForce);
+		
 		Destroy (gameObject);
 	}
 }

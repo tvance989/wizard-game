@@ -21,8 +21,6 @@ public class Explosion : MonoBehaviour {
 
 		started = true;
 
-//		Collider2D[] colliders = Physics2D.OverlapCircleAll (new Vector2 (transform.position.x, transform.position.y), radius);
-
 		//.will be deprecated when OnParticleCollision works
 		foreach (Collider2D other in Physics2D.OverlapCircleAll (new Vector2 (transform.position.x, transform.position.y), radius)) {
 			if (other.tag == "Enemy") {
