@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Bomb: Spell {
-	public float fuse, blastRadius, damage;
+	public float fuse, radius, damage, force;
 	public GameObject explosion;
 
 	float ttl;
@@ -17,8 +17,9 @@ public class Bomb: Spell {
 	}
 
 	void Explode () {
-		Instantiate (explosion, GetComponent<Transform> ().position, Quaternion.identity);
-
+		GameObject clone = Instantiate (explosion, GetComponent<Transform> ().position, Quaternion.identity) as GameObject;
+		clone.GetComponent<Explosion> ().Explode (radius, damage, force);
+		
 		Destroy (gameObject);
 	}
 }
