@@ -24,7 +24,6 @@ public class GameController : MonoBehaviour {
 		spells.Add ("hyd","Wave");
 		spells.Add ("nec","LeechLife");
 		spells.Add ("pyr","Fireball");
-		spells.Add ("pyrpyrpyr","FireCloak");
 		spells.Add ("sum","SummonOni");
 		
 		// 2x spells
@@ -75,10 +74,11 @@ public class GameController : MonoBehaviour {
 		spells.Add ("pyrsum","SummonFireSprites");
 		
 		// 3x spells
-		spells.Add ("aergeopyr","Soul");
+//		spells.Add ("aergeopyr","Soul");
 		spells.Add ("alcalcalc","Bomb");
 		spells.Add ("hydhydhyd","Glacier");
 		spells.Add ("necnecnec","Leechionnaire");
+		spells.Add ("pyrpyrpyr","FireCloak");
 	}
 
 	public string[] GetSpellsFromItems (Item[] items) {
