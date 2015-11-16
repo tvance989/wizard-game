@@ -33,10 +33,9 @@ public class Poison: Spell {
 		started = true;
 		GetComponent<Renderer> ().enabled = false;
 
-		foreach (Collider2D other in Physics2D.OverlapCircleAll (new Vector2 (rb.position.x, rb.position.y), splashRadius)) {
+		foreach (Collider2D other in Physics2D.OverlapCircleAll (new Vector2 (rb.position.x, rb.position.y), splashRadius))
 			if (other.tag == "Enemy")
-				DoT.DoDoT (other.gameObject, dps, duration);
-		}
+				other.gameObject.AddComponent<DoT> ().Initialize (dps, duration);
 	}
 
 	void Update () {
