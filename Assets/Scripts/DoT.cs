@@ -2,23 +2,17 @@
 using System.Collections;
 
 public class DoT : MonoBehaviour {
-	float dps, duration, ttl;
+	float dps;
 
 	public void Initialize (float dps, float duration) {
 		this.dps = dps;
-		this.duration = duration;
 
-		ttl = Time.time + this.duration;
-		
-		StartCoroutine (Initiate ());
+		InvokeRepeating ("Fire", 1, 1);
+
+		Destroy (this, duration + 0.5f);
 	}
 
-	IEnumerator Initiate () {
-		while (Time.time < ttl) {
-			gameObject.SendMessage ("Damage", dps * Time.deltaTime);
-			yield return null;
-		}
-
-		Destroy (this);
+	void Fire () {
+		gameObject.SendMessage ("Damage", dps);
 	}
 }
