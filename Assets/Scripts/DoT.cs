@@ -8,7 +8,7 @@ public class DoT : MonoBehaviour {
 		this.dps = dps;
 		this.duration = duration;
 
-		ttl = Time.time + duration;
+		ttl = Time.time + this.duration;
 		
 		StartCoroutine (Initiate ());
 	}

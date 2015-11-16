@@ -5,12 +5,10 @@ public class Poison: Spell {
 	public float splashRadius, dps, duration;
 
 	Rigidbody2D rb;
-	ParticleSystem particles;
-	bool started;
+	ParticleSystem ps;
 
 	void Awake () {
 		rb = GetComponent<Rigidbody2D> ();
-		particles = GetComponent<ParticleSystem> ();
 	}
 
 	public override void Cast () {
@@ -28,9 +26,10 @@ public class Poison: Spell {
 	}
 
 	void Splash () {
-		particles.Simulate (0);
-		particles.Play ();
-		started = true;
+		ps = GetComponent<ParticleSystem> ();
+		ps.Simulate (0);
+		ps.Play ();
+
 		GetComponent<Renderer> ().enabled = false;
 
 		foreach (Collider2D other in Physics2D.OverlapCircleAll (new Vector2 (rb.position.x, rb.position.y), splashRadius))
@@ -39,7 +38,7 @@ public class Poison: Spell {
 	}
 
 	void Update () {
-		if (started && !particles.isPlaying)
+		if (ps && !ps.IsAlive ())
 			Destroy (gameObject);
 	}
 }
